@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "info": "Piyush Prateek",
+    "description": "Highly skilled and self-motivated Full Stack Developer with more than 2+ years of industry experience specializing in the MERN stack. Proficient in JavaScript, TypeScript, MongoDB, Express, React, and Node.js. Demonstrated expertise in building dynamic and responsive user interfaces using Redux, Context API, Chart.js, Custom CSS and Chakra UI. My portfolio showcases a diverse range of projects, including: MERN Chat Application, E-commerce Shopping Cart, Real-Time Crypto Dashboard, Video Hub, NoteZipper. Known for exceptional communication skills and collaborative nature, I excel in pair programming and cross-functional team environments."
+  },
+  {
+    "id": 2,
+    "info": "Experience",
+    "description": "Lucify Labs Pvt. Ltd | Delhi. Full Stack Developer | 01/2023 - 03/2024. Developed and maintained web applications using JavaScript and TypeScript. Built responsive user interfaces with React. Created and managed backend services with Node.js and Express. Designed and optimized databases with MongoDB. Implemented RESTful APIs for seamless client-server communication. Collaborated with cross-functional teams to define, design, and ship new features. Ensured application performance, quality, and responsiveness. Utilized version control systems like Git for code management and collaboration. Conducted code reviews and provided mentorship to junior developers. Troubleshoot and debugged issues to enhance user experience."
+  },
+  {
+    "id": 3,
+    "info": "Skills",
+    "description": "Full Stack Development: MERN Stack (MongoDB, Express.js, React.js, Node.js). Programming Languages: JavaScript, TypeScript, Python. Frontend: React.js, Next.js, Redux, Context API, Chart.js, HTML, CSS. Backend: Node.js, Express.js, MongoDB, Firebase. Version Control: Git, GitHub, GitBash. Project Management: Jira. Other: Search Engine Optimization (SEO), Firebase (real-time database, authentication)."
+  },
+  {
+    "id": 4,
+    "info": "Personal Projects",
+    "description": "MERN E-COMMERCE PROJECT: Backend: Node.js, Express.js, MongoDB, Cloudinary, Stripe. Frontend: React, Emotion, Material-UI, Redux Toolkit. Deployed URL: https://ecommerce-06le.onrender.com/. GitHub Repo Link: https://github.com/piyushpratek/EcommerceMernProject. MERN Chat Full Stack Project: Technologies: JavaScript, React.js, Node.js, Express.js, MongoDB, Socket.io, JWT, Chakra UI. Deployed URL: https://chat-rlbn.onrender.com/chats/. GitHub Repo Link: https://github.com/piyushpratek/mern-chat-app-piyush. MERN NoteZipper Full Stack Project: Technologies: JavaScript, React.js, Redux, Node.js, Express.js, MongoDB. Deployed URL: https://note-zipper-2o9s.onrender.com/. GitHub Repo Link: https://github.com/piyushpratek/NoteZipper. Real-Time Crypto Dashboard - React FrontEnd: Technologies: React.js, API integration. Deployed URL: https://crypto-currency-app-red.vercel.app/. GitHub Repo Link: https://github.com/piyushpratek/CryptoCurrencyApp. Tech Industry Project - React FrontEnd: Technologies: React.js, Sass, HTML. Deployed URL: https://reactone-five.vercel.app/. GitHub Repo Link: https://github.com/piyushpratek/TechIndustryProject. Video Hub - React FrontEnd: Technologies: React.js, Chakra UI. Deployed URL: https://videohubproject.vercel.app/. GitHub Repo Link: https://github.com/piyushpratek/VideoHubProject. Shopping Cart - React Redux FrontEnd: Technologies: React.js, Redux.js. Deployed URL: https://shopping-cart-redux-gamma.vercel.app/. GitHub Repo Link: https://github.com/piyushpratek/ShoppingCartRedux. Portfolio - React FrontEnd: Deployed URL: https://piyushprateek-portfolio.vercel.app/"
+  },
+  {
+    "id": 5,
+    "info": "Education",
+    "description": "University Institute of Engineering and Technology, Panjab University. Bachelor of Engineering in Electronics And Communication Engineering (ECE) - 2021. St. Xavier's High School +2 - 2015. St. Karen's High School 10th - 2013."
+  },
+  {
+    "id": 6,
+    "info": "Interests",
+    "description": "Open-Source Contributions, Technology Trends, Problem-Solving Challenges, Web Design, Pair Programming."
+  },
+  {
+    "id": 7,
+    "info": "Personality Highlights",
+    "description": "Creative and Innovative, Self-Motivated and Driven, Collaborative Team Player, Conflict Resolution Skills, Excellent Communication Skills, Logical Thinker and Problem Solver."
+  },
+  {
+    "id": 8,
+    "info": "Personal Details",
+    "description": "Date of Birth: 23/11/1996. Nationality: Indian. Gender: Male."
+  },
+  {
+    "id": 9,
+    "info": "Contact Information",
+    "description": "Phone: 7903234075. Email: piyushprateek231996@gmail.com. Portfolio: https://piyushprateek-portfolio.vercel.app/. LinkedIn: https://www.linkedin.com/in/piyush-prateek-9a922912b. GitHub: https://github.com/piyushpratek."
+  }
+]
