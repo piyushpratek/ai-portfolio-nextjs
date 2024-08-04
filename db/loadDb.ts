@@ -36,29 +36,80 @@ const createCollection = async () => {
     }
 }
 
+// const loadData = async () => {
+//     const collection = await db.collection("portfolio")
+//     for await (const { id, info, description } of sampleData) {
+//         const chunks = await splitter.splitText(description);
+//         let i = 0;
+//         for await (const chunk of chunks) {
+//             const { data } = await openai.embeddings.create({
+//                 input: chunk,
+//                 model: "text-embedding-3-small"
+//             })
+
+//             const res = await collection.insertOne({
+//                 document_id: id,
+//                 $vector: data[0]?.embedding,
+//                 info,
+//                 description: chunk
+//             })
+
+//             i++
+//         }
+//     }
+
+//     console.log("data added");
+// }
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 const loadData = async () => {
-    const collection = await db.collection("portfolio")
+    const collection = await db.collection("portfolio");
     for await (const { id, info, description } of sampleData) {
         const chunks = await splitter.splitText(description);
         let i = 0;
         for await (const chunk of chunks) {
-            const { data } = await openai.embeddings.create({
-                input: chunk,
-                model: "text-embedding-3-small"
-            })
+            let retryCount = 0;
+            let success = false;
 
-            const res = await collection.insertOne({
-                document_id: id,
-                $vector: data[0]?.embedding,
-                info,
-                description: chunk
-            })
+            while (!success && retryCount < 3) { // Reducing retries to 3
+                try {
+                    const { data } = await openai.embeddings.create({
+                        input: chunk,
+                        model: "text-embedding-3-small"
+                    });
 
-            i++
+                    await collection.insertOne({
+                        document_id: id,
+                        $vector: data[0]?.embedding,
+                        info,
+                        description: chunk
+                    });
+
+                    success = true;
+                    i++;
+                } catch (error: any) {
+                    if (error.code === 'insufficient_quota') {
+                        retryCount++;
+                        const delay = Math.pow(2, retryCount) * 10000; // Increasing base delay to 10 seconds
+                        console.log(`Rate limit exceeded, retrying in ${delay} ms...`);
+                        await sleep(delay);
+                    } else {
+                        console.log("Error creating embeddings", error);
+                        break;
+                    }
+                }
+            }
+
+            if (!success) {
+                console.log(`Failed to process chunk for id ${id} after ${retryCount} retries`);
+                console.log("Exiting due to insufficient quota. Please try again later.");
+                process.exit(1); // Exiting the process
+            }
         }
     }
 
-    console.log("data added");
+    console.log("Data added");
 }
 
 createCollection().then(() => loadData())
