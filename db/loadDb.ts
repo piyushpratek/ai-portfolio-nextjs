@@ -19,6 +19,7 @@ const db = client.db(endpoint, {
     namespace: process.env.ASTRA_DB_NAMESPACE
 })
 
+
 const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 1000,
     chunkOverlap: 200,
