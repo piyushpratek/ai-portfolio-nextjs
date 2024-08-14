@@ -25,17 +25,37 @@ const splitter = new RecursiveCharacterTextSplitter({
     chunkOverlap: 200,
 });
 
-const createCollection = async () => {
+// const createCollection = async () => {
+//     try {
+//         await db.createCollection("portfolio", {
+//             vector: {
+//                 dimension: 1536,
+//             }
+//         })
+//     } catch (error) {
+//         console.log("Collection Already Exists", error);
+//     }
+// }
+
+const createCollectionIfNotExists = async () => {
     try {
-        await db.createCollection("portfolio", {
-            vector: {
-                dimension: 1536,
-            }
-        })
+        const collections = await db.listCollections();
+        const collectionNames = collections.map(col => col.name);
+
+        if (!collectionNames.includes("portfolio")) {
+            await db.createCollection("portfolio", {
+                vector: {
+                    dimension: 1536,
+                }
+            });
+            console.log("Collection created successfully");
+        } else {
+            console.log("Collection already exists");
+        }
     } catch (error) {
-        console.log("Collection Already Exists", error);
+        console.log("Error listing or creating collection", error);
     }
-}
+};
 
 // const loadData = async () => {
 //     const collection = await db.collection("portfolio")
@@ -64,53 +84,105 @@ const createCollection = async () => {
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+// const loadData = async () => {
+//     const collection = await db.collection("portfolio");
+//     for await (const { id, info, description } of sampleData) {
+//         const chunks = await splitter.splitText(description);
+//         let i = 0;
+//         for await (const chunk of chunks) {
+//             let retryCount = 0;
+//             let success = false;
+
+//             while (!success && retryCount < 3) { // Reducing retries to 3
+//                 try {
+//                     const { data } = await openai.embeddings.create({
+//                         input: chunk,
+//                         model: "text-embedding-3-small"
+//                     });
+
+//                     await collection.insertOne({
+//                         document_id: id,
+//                         $vector: data[0]?.embedding,
+//                         info,
+//                         description: chunk
+//                     });
+
+//                     success = true;
+//                     i++;
+//                 } catch (error: any) {
+//                     if (error.code === 'insufficient_quota') {
+//                         retryCount++;
+//                         const delay = Math.pow(2, retryCount) * 10000; // Increasing base delay to 10 seconds
+//                         console.log(`Rate limit exceeded, retrying in ${delay} ms...`);
+//                         await sleep(delay);
+//                     } else {
+//                         console.log("Error creating embeddings", error);
+//                         break;
+//                     }
+//                 }
+//             }
+
+//             if (!success) {
+//                 console.log(`Failed to process chunk for id ${id} after ${retryCount} retries`);
+//                 console.log("Exiting due to insufficient quota. Please try again later.");
+//                 process.exit(1); // Exiting the process
+//             }
+//         }
+//     }
+
+//     console.log("Data added");
+// }
+
 const loadData = async () => {
-    const collection = await db.collection("portfolio");
-    for await (const { id, info, description } of sampleData) {
-        const chunks = await splitter.splitText(description);
-        let i = 0;
-        for await (const chunk of chunks) {
-            let retryCount = 0;
-            let success = false;
+    try {
+        const collection = await db.collection("portfolio");
+        for (const { id, info, description } of sampleData) {
+            const chunks = await splitter.splitText(description);
+            for (const chunk of chunks) {
+                let retryCount = 0;
+                let success = false;
 
-            while (!success && retryCount < 3) { // Reducing retries to 3
-                try {
-                    const { data } = await openai.embeddings.create({
-                        input: chunk,
-                        model: "text-embedding-3-small"
-                    });
+                while (!success && retryCount < 3) {
+                    try {
+                        const { data } = await openai.embeddings.create({
+                            input: chunk,
+                            model: "text-embedding-3-small"
+                        });
 
-                    await collection.insertOne({
-                        document_id: id,
-                        $vector: data[0]?.embedding,
-                        info,
-                        description: chunk
-                    });
+                        await collection.insertOne({
+                            document_id: id,
+                            $vector: data[0]?.embedding,
+                            info,
+                            description: chunk
+                        });
 
-                    success = true;
-                    i++;
-                } catch (error: any) {
-                    if (error.code === 'insufficient_quota') {
-                        retryCount++;
-                        const delay = Math.pow(2, retryCount) * 10000; // Increasing base delay to 10 seconds
-                        console.log(`Rate limit exceeded, retrying in ${delay} ms...`);
-                        await sleep(delay);
-                    } else {
-                        console.log("Error creating embeddings", error);
-                        break;
+                        success = true;
+                    } catch (error: any) {
+                        if (error.code === 'insufficient_quota') {
+                            retryCount++;
+                            const delay = Math.pow(2, retryCount) * 10000; // Increasing base delay to 10 seconds
+                            console.log(`Rate limit exceeded, retrying in ${delay} ms...`);
+                            await sleep(delay);
+                        } else {
+                            console.log("Error creating embeddings", error);
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (!success) {
-                console.log(`Failed to process chunk for id ${id} after ${retryCount} retries`);
-                console.log("Exiting due to insufficient quota. Please try again later.");
-                process.exit(1); // Exiting the process
+                if (!success) {
+                    console.log(`Failed to process chunk for id ${id} after ${retryCount} retries`);
+                    console.log("Exiting due to insufficient quota. Please try again later.");
+                    process.exit(1); // Exiting the process
+                }
             }
         }
-    }
 
-    console.log("Data added");
+        console.log("Data added");
+    } catch (error) {
+        console.log("Error loading data", error);
+    }
 }
 
-createCollection().then(() => loadData())
+// createCollection().then(() => loadData())
+createCollectionIfNotExists().then(() => loadData()).catch(console.error);
